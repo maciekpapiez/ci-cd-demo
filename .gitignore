@@ -1,0 +1,15 @@
+/gradle/
+/gradlew
+/gradlew.bat
+*.iml
+/.idea/
+/.gradle/
+*build/
+**/bin
+**/.classpath
+**/.project
+**/.settings
+**/hibernate.cfg.xml
+.DS_Store
+classes/
+out/

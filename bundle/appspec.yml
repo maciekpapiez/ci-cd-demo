@@ -1,0 +1,27 @@
+version: 0.0
+os: linux
+
+files:
+ - source: /test-app.jar
+   destination: /srv/app
+
+hooks:
+  ApplicationStop:
+    - location: scripts/stop_app.sh
+      timeout: 10
+    - location: scripts/deregister_with_elb.sh
+      timeout: 10
+  BeforeInstall:
+    - location: scripts/before_install.sh
+      timeout: 10
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 10
+  ApplicationStart:
+    - location: scripts/start_app.sh
+      timeout: 10
+    - location: scripts/register_with_elb.sh
+      timeout: 10
+  ValidateService:
+    - location: scripts/health_check.sh
+      timeout: 20
