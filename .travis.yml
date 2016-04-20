@@ -15,7 +15,7 @@ cache:
 script: gradle build
 
 before_deploy:
-  - mv build/libs/java-docker.jar bundle/test-app.jar
+  - mv build/libs/ci-cd-demo.jar bundle/test-app.jar
   - zip test-app.zip -r bundle/
 
 deploy:
