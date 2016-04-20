@@ -27,7 +27,7 @@ deploy:
     bucket: xsolve-ci-cd-demo-codedeploy
     key: test-app.zip
     bundle_type: zip
-    application: DemoApp
+    application: Demo-App
     deployment_group: test-deployment-group
     on:
       branch: master
