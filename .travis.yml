@@ -1,34 +1,36 @@
 language: java
 jdk:
-  - oraclejdk8
-
+- oraclejdk8
 services:
-  - postgresql
-
+- postgresql
 before_script:
-  - psql -c 'create database testdb;' -U postgres
-
+- psql -c 'create database testdb;' -U postgres
 cache:
   directories:
-    - $HOME/.gradle/caches
-
+  - $HOME/.gradle/caches
 script: gradle build
-
 before_deploy:
-  - mv build/libs/ci-cd-demo.jar bundle/test-app.jar
-  - zip test-app.zip -r bundle/
-
+- mkdir -p dpl_cd_upload
+- mv test-app.zip dpl_cd_upload/test-app.zip
 deploy:
-  - provider: codedeploy
-    access_key_id:
-      secure: "Jz23i9gRoewgSSIT5nx4mK/6AL3e2yLmtBcouz+FpQkfUtI1v1wg/fZITXSpEvQ3rY3YTrAFsnVg1+hpMoLJ7prUf9U4DGMszvZm1a97A2s/iFD77wksgMKx3rVXAHU1v3y3QbE580oKcIVm0tWlog163NXoe4ThwOtFIX3Pd2tjDUB3Nuuho41TqvSMGNwEX8R+bo9wZUIQszK1xw3yx3MOuHQOGSGcjVPgAbKiCV6wlMJzSfZAzXtljHsFt3DQsq4C0R+SOJUrV1xigRoZJO6HM6k+JOhMjRTAPDmKPQ9tHeTwYDEFMqDLlQwY4zxJGBj+O4J8kn+NmGIhkGAnyabZw/lgSfitgyrF8inE/DFvV3GAwbO85KkuoD0dv4ivoSvwfT/M1U8tdJi4xAYyRk3I/O1ohtrcxiKMrxocOvskOqKT05tpNEGDDOUdr2pGm735dvkElo7f9qTTeDpMKlqzo4I4I9nGyyTp6qgl0cM0qIhnWDmJadlrWck3YB9qnrMXu5p1kA+eKCuRkC1PKRsQz3de3a4TIwTIS4hH3avTjQSrDvB1UZPJ2Whw8zDZw+CAzBQMyIRpmPd3CJu+IpQuakubhChH7KeQVgIkbh9yw3tgb+3vxFFtRlBkil0r+nimcPEp6fk071d0AXmJEQLAYfkOGp+l9g+Ge2SatLs="
-    secret_access_key:
-      secure: "gDY3m4vgmAEemnIFvzpQCWiC1vX145WrwFMTKTUUw4Vfsjj7Dif7tJO6wz57CkyGNGXGL9bT6bQF2EaHgX5EWs8Kv7RDaEn0czb9YMdL2BHyJBUhDlw+oMVOLB/d7o3cRCOgyYm5jbS4ZPuNkrwDQpFPouEDE0qpTS4T/GXtKcDnVP1jxn6xL99K2cjS74oxxTdtfJwEnx8q3h6zseuMZ9+S0yLXz0jrTrWXEo9QepofBE4i4O+J4SEpRANgRr+lDXK1g1VipvcPmAm4rNfghCsIfeHI7nLV9QBhMbKR5rsNpdp2lK/Yoe7gVIjxUBtmYjwS1JJiteUolbPZ0IvOUiAWMYh/DX+1gE0VhSNs66jByTebzjv2HtZhK67Z2SjgCr5oNQwukDBsLb/HwY1/3qO6ijhClUu7pTXO3qeKTuOysfbKTHzVCLlYZ1FmmkMcWN4OQSufNtOiavhUn3sPS28OJcd91zGnlo7Pk8i+r2VPQ45Uh5RWFKe4AJyK4OD2GJjvW+Xmv0FTHobJtkzvJ5bZmEZtieDveBzDO914+IJGEhIimSYKnAQelT8Y1guel351UKwCpHWkkQpL2ckRRxB9n3r1bWVKsD1TQDLfOfJpn3NPfGZI2/6QAMCBnCY+88p2rdfiXkSF8TKwf8pT+JoJjxu39/aPM1pfaU8CJPY="
-    bucket: xsolve-ci-cd-demo-codedeploy
-    key: test-app.zip
-    bundle_type: zip
-    application: Demo-App
-    deployment_group: test-deployment-group
-    on:
-      branch: master
-    region: eu-central-1
+- provider: s3
+  access_key_id:
+    secure: "Jz23i9gRoewgSSIT5nx4mK/6AL3e2yLmtBcouz+FpQkfUtI1v1wg/fZITXSpEvQ3rY3YTrAFsnVg1+hpMoLJ7prUf9U4DGMszvZm1a97A2s/iFD77wksgMKx3rVXAHU1v3y3QbE580oKcIVm0tWlog163NXoe4ThwOtFIX3Pd2tjDUB3Nuuho41TqvSMGNwEX8R+bo9wZUIQszK1xw3yx3MOuHQOGSGcjVPgAbKiCV6wlMJzSfZAzXtljHsFt3DQsq4C0R+SOJUrV1xigRoZJO6HM6k+JOhMjRTAPDmKPQ9tHeTwYDEFMqDLlQwY4zxJGBj+O4J8kn+NmGIhkGAnyabZw/lgSfitgyrF8inE/DFvV3GAwbO85KkuoD0dv4ivoSvwfT/M1U8tdJi4xAYyRk3I/O1ohtrcxiKMrxocOvskOqKT05tpNEGDDOUdr2pGm735dvkElo7f9qTTeDpMKlqzo4I4I9nGyyTp6qgl0cM0qIhnWDmJadlrWck3YB9qnrMXu5p1kA+eKCuRkC1PKRsQz3de3a4TIwTIS4hH3avTjQSrDvB1UZPJ2Whw8zDZw+CAzBQMyIRpmPd3CJu+IpQuakubhChH7KeQVgIkbh9yw3tgb+3vxFFtRlBkil0r+nimcPEp6fk071d0AXmJEQLAYfkOGp+l9g+Ge2SatLs="
+  secret_access_key:
+    secure: "gDY3m4vgmAEemnIFvzpQCWiC1vX145WrwFMTKTUUw4Vfsjj7Dif7tJO6wz57CkyGNGXGL9bT6bQF2EaHgX5EWs8Kv7RDaEn0czb9YMdL2BHyJBUhDlw+oMVOLB/d7o3cRCOgyYm5jbS4ZPuNkrwDQpFPouEDE0qpTS4T/GXtKcDnVP1jxn6xL99K2cjS74oxxTdtfJwEnx8q3h6zseuMZ9+S0yLXz0jrTrWXEo9QepofBE4i4O+J4SEpRANgRr+lDXK1g1VipvcPmAm4rNfghCsIfeHI7nLV9QBhMbKR5rsNpdp2lK/Yoe7gVIjxUBtmYjwS1JJiteUolbPZ0IvOUiAWMYh/DX+1gE0VhSNs66jByTebzjv2HtZhK67Z2SjgCr5oNQwukDBsLb/HwY1/3qO6ijhClUu7pTXO3qeKTuOysfbKTHzVCLlYZ1FmmkMcWN4OQSufNtOiavhUn3sPS28OJcd91zGnlo7Pk8i+r2VPQ45Uh5RWFKe4AJyK4OD2GJjvW+Xmv0FTHobJtkzvJ5bZmEZtieDveBzDO914+IJGEhIimSYKnAQelT8Y1guel351UKwCpHWkkQpL2ckRRxB9n3r1bWVKsD1TQDLfOfJpn3NPfGZI2/6QAMCBnCY+88p2rdfiXkSF8TKwf8pT+JoJjxu39/aPM1pfaU8CJPY="
+  local_dir: dpl_cd_upload
+  skip_cleanup: true
+  on: &21619580
+    branch: master
+  bucket: xsolve-ci-cd-demo-codedeploy
+- provider: codedeploy
+  access_key_id:
+    secure: "Jz23i9gRoewgSSIT5nx4mK/6AL3e2yLmtBcouz+FpQkfUtI1v1wg/fZITXSpEvQ3rY3YTrAFsnVg1+hpMoLJ7prUf9U4DGMszvZm1a97A2s/iFD77wksgMKx3rVXAHU1v3y3QbE580oKcIVm0tWlog163NXoe4ThwOtFIX3Pd2tjDUB3Nuuho41TqvSMGNwEX8R+bo9wZUIQszK1xw3yx3MOuHQOGSGcjVPgAbKiCV6wlMJzSfZAzXtljHsFt3DQsq4C0R+SOJUrV1xigRoZJO6HM6k+JOhMjRTAPDmKPQ9tHeTwYDEFMqDLlQwY4zxJGBj+O4J8kn+NmGIhkGAnyabZw/lgSfitgyrF8inE/DFvV3GAwbO85KkuoD0dv4ivoSvwfT/M1U8tdJi4xAYyRk3I/O1ohtrcxiKMrxocOvskOqKT05tpNEGDDOUdr2pGm735dvkElo7f9qTTeDpMKlqzo4I4I9nGyyTp6qgl0cM0qIhnWDmJadlrWck3YB9qnrMXu5p1kA+eKCuRkC1PKRsQz3de3a4TIwTIS4hH3avTjQSrDvB1UZPJ2Whw8zDZw+CAzBQMyIRpmPd3CJu+IpQuakubhChH7KeQVgIkbh9yw3tgb+3vxFFtRlBkil0r+nimcPEp6fk071d0AXmJEQLAYfkOGp+l9g+Ge2SatLs="
+  secret_access_key:
+    secure: "gDY3m4vgmAEemnIFvzpQCWiC1vX145WrwFMTKTUUw4Vfsjj7Dif7tJO6wz57CkyGNGXGL9bT6bQF2EaHgX5EWs8Kv7RDaEn0czb9YMdL2BHyJBUhDlw+oMVOLB/d7o3cRCOgyYm5jbS4ZPuNkrwDQpFPouEDE0qpTS4T/GXtKcDnVP1jxn6xL99K2cjS74oxxTdtfJwEnx8q3h6zseuMZ9+S0yLXz0jrTrWXEo9QepofBE4i4O+J4SEpRANgRr+lDXK1g1VipvcPmAm4rNfghCsIfeHI7nLV9QBhMbKR5rsNpdp2lK/Yoe7gVIjxUBtmYjwS1JJiteUolbPZ0IvOUiAWMYh/DX+1gE0VhSNs66jByTebzjv2HtZhK67Z2SjgCr5oNQwukDBsLb/HwY1/3qO6ijhClUu7pTXO3qeKTuOysfbKTHzVCLlYZ1FmmkMcWN4OQSufNtOiavhUn3sPS28OJcd91zGnlo7Pk8i+r2VPQ45Uh5RWFKe4AJyK4OD2GJjvW+Xmv0FTHobJtkzvJ5bZmEZtieDveBzDO914+IJGEhIimSYKnAQelT8Y1guel351UKwCpHWkkQpL2ckRRxB9n3r1bWVKsD1TQDLfOfJpn3NPfGZI2/6QAMCBnCY+88p2rdfiXkSF8TKwf8pT+JoJjxu39/aPM1pfaU8CJPY="
+  bucket: xsolve-ci-cd-demo-codedeploy
+  key: test-app.zip
+  bundle_type: zip
+  application: Demo-App
+  deployment_group: test-deployment-group
+  on: *21619580
