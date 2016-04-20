@@ -10,6 +10,8 @@ cache:
   - $HOME/.gradle/caches
 script: gradle build
 before_deploy:
+- mv build/libs/ci-cd-demo.jar bundle/test-app.jar
+- zip test-app.zip -r bundle/
 - mkdir -p dpl_cd_upload
 - mv test-app.zip dpl_cd_upload/test-app.zip
 deploy:
