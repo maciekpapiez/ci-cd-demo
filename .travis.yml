@@ -42,14 +42,15 @@ deploy:
 #    bucket: xsolve-ci-cd-demo-codedeploy
 #    region: eu-central-1
   - provider: codedeploy
-    access_key_id: *1
-    secret_access_key: *2
+#    access_key_id: *1
+#    secret_access_key: *2
     bucket: xsolve-ci-cd-demo-codedeploy
     key: test-app.zip
     bundle_type: zip
     application: Demo-App
     deployment_group: test-deployment-group
-    on: *3
+    on:
+      branch: master
     region: eu-central-1
     wait-until-deployed: true
 
