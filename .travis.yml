@@ -7,15 +7,17 @@ services:
 
 before_script:
   - psql -c 'create database testdb;' -U postgres
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
 
 cache:
   directories:
     - $HOME/.gradle/caches
 
-apt:
-  packages:
-    - python
-    - python-pip
+#apt:
+#  packages:
+#    - python
+#    - python-pip
 
 script: gradle build
 
@@ -25,7 +27,6 @@ before_deploy:
   - cd bundle
   - zip -r ../upload/test-app.zip ./
   - cd ..
-  - pip install awscli
   - aws s3 cp upload/test-app.zip s3://xsolve-ci-cd-demo-codedeploy/test-app.zip --region eu-central-1
 
 deploy:
