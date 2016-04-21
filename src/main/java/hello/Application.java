@@ -19,14 +19,14 @@ public class Application {
     @Autowired
 	private UserRepository userRepository;
 
-	@RequestMapping("/info")
-	public Map<String, Object> getInfo() throws UnknownHostException {
-		final Map<String, Object> map = new HashMap<>();
-		map.put("users", userRepository.findAll().size());
-		map.put("host", InetAddress.getLocalHost().getHostAddress());
-		map.put("version", "0.1");
+	@RequestMapping("/demo")
+	public Status getInfo() throws UnknownHostException {
+		final Status status = new Status();
+		status.setAddress(InetAddress.getLocalHost().getHostAddress());
+		status.setVersion("0.1");
+		status.setUsersCount(userRepository.findAll().size());
 
-		return map;
+		return status;
 	}
 
 	public static void main(String[] args) {
