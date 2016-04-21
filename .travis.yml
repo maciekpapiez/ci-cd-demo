@@ -42,8 +42,6 @@ deploy:
 #    bucket: xsolve-ci-cd-demo-codedeploy
 #    region: eu-central-1
   - provider: codedeploy
-#    access_key_id: *1
-#    secret_access_key: *2
     bucket: xsolve-ci-cd-demo-codedeploy
     key: test-app.zip
     bundle_type: zip
