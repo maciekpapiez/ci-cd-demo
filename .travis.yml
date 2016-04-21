@@ -43,3 +43,4 @@ deploy:
     deployment_group: test-deployment-group
     on: *3
     region: eu-central-1
+    wait-until-deployed: true
