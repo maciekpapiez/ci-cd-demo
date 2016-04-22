@@ -16,7 +16,7 @@ import java.util.Map;
 @RestController
 public class Application {
 
-	protected static final String VERSION = "0.1";
+	protected static final String VERSION = "0.2";
 
 	@Autowired
 	private UserRepository userRepository;
