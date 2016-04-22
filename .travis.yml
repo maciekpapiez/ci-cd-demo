@@ -8,8 +8,6 @@ services:
 cache:
   directories:
     - $HOME/.gradle/caches
-    - pip install --user awscli
-    - export PATH=$PATH:$HOME/.local/bin
 
 before_deploy:
   - mv build/libs/ci-cd-demo.jar bundle/test-app.jar
@@ -32,6 +30,8 @@ deploy:
 
 before_script:
   - psql -c 'create database testdb;' -U postgres
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
 
 script: gradle build
 
