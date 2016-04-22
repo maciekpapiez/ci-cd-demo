@@ -5,16 +5,11 @@ jdk:
 services:
   - postgresql
 
-before_script:
-  - psql -c 'create database testdb;' -U postgres
-  - pip install --user awscli
-  - export PATH=$PATH:$HOME/.local/bin
-
 cache:
   directories:
     - $HOME/.gradle/caches
-
-script: gradle build
+    - pip install --user awscli
+    - export PATH=$PATH:$HOME/.local/bin
 
 before_deploy:
   - mv build/libs/ci-cd-demo.jar bundle/test-app.jar
@@ -35,7 +30,16 @@ deploy:
     region: eu-central-1
     wait-until-deployed: true
 
+before_script:
+  - psql -c 'create database testdb;' -U postgres
+
+script: gradle build
+
 env:
   global:
     - secure: "qTxeV1QetxffBoUXQ8SYE4iEH3E90k+GNgvAkzlx6Xsk2S2kITPywpVWAgZvR46lLLezCfCewWshDq35UFw4fEZEve4fBJzvvyvQ6UUgPKhjxdKdDKGyX+1HwwZklExhRTZXyPpFHN7JIsHFp29WijKoD9jT2GM912sP83d4Hur8N+0GLV4fxwJuoESisbi3IyRbzpL5Tgs8lsWmi5XpElpu6JviA9eavFD1Ips3s33sLX36Pd2nhmD/GDXnm8Bk8ZJQ+ecz71JMIjj/euA6yi2Aw5j7koLBrT/rGUoG+alo+HtN36IVTQVsFr116fN3yUjPI/oFk7T01sVVW4rmouH14ee8K1HZmM56SW8uHI41XbF922p0iAvJFIY9NlukJ2Zwl76CK+SMaVcnO2D4uLpNagi/QaVRZbU4oAYwMVlyATaFauoP1DM3MSsDbm0fqX66YK10xZeQFVzAXK+T4XWaeCeD6m5AvOxWMh4ijQphCJsaJ37c54tGrLex/fqN/vlbAP3ToXe+i8XH+blBoNNAQi1q8A6dDl0muNqjRRr9Ro5yt1DhHGCT+gp89hA3jQwTz1+yBWpuY7hsQ27qu/cPKEe4hkG9+53pFkmA0KD5VpM5vPLnROMlJ1CiOXFZLl2IPHV9UEVuqFH0szoq0fVaB1fBIx+PeUJzQ8zdFPI="
     - secure: "F6O9XCvEsk4EZHfrAcdhNd9m7uBZoZh8UnuoUP87Nb/HGeSKQpRWQxQ2kzqEv2uYkhHK4aJuG4sGThH2qzfxOgT53UZSsoNl+Y+Yij6j1jkohCqlXV4I8ELVwtn3bBjs/oJSHtAM7KnyeRmJVPTrMZl06epbAJjyB67Rk5BilcJdJf40Tu1jTaGay3145LK+VWazUDkF69O+ZBxU5gA5kdY/Cw/GZIMEWnBCNHtQjGP9IfjhHFIaOlJZ8nxxftAbj45dvDuQ051HU7ou1UTPY91KxUUZcchUgbi7Byw41Es6Cbv5R/JEWN2ysUVsZ8UfChfQTVydokYsSBjxKVxeQNbf87nJMrAosIxUxKcdDu73OD5aBHFvqZLNU3r1PcKS7ypIsuF2S5InGjlAsF6RGkUZAqHf6dDyPb7CL35UgFuDQ4aJ+lM3K+lcRQ5V/WHUsNWzBDJSjmXGBxorDI6nFRxS2ODs4jl+d++mrFxrIUMdT2+l3DgthiRPPfTvFuQ9uDpydI2HTZ2ZS2rI77AyZUBLvADBxgIDeX2JVWh3cK9XPVVDpzFo2UsruTIdBs4ortQErfoJzG23poambE58Q3lnzxF94SAIQOVpfAF29fZOJQH7TLV9D0/StwZH67Jdr9FPabjdViyS590p2FTnU7tJ7K1Z7b0Nq+PDXtx5QH8="
+
+notifications:
+  slack:
+    secure: "X+XEVot41jvLP2E1MNw24e/s8Dk9yCRi/w6m7eCocJ/DUsITIHgQHzMLkgAbbYyaTecyZIxWkfazc5cpX2ReO+xx7WxYcM57kUgzXN6h2roDeVUL/h49j14c+2lOMPGrGpRyqV3wcv6LNiG54QZTc79HchfHzhuB42Q8HN52PWeAemVp1rVsdfpr4WUP9qRD2LZhe18EvkyR4H+ZdQHhG3K3rPCtaAFgfga51oenB2oGt6xFm5+ABf2yQlcVKHL5hhWg6K2ZIbaVsJP4gqio0sNXNKO5XYJ5N/axd09pOT5SNxtnE9ydZaIc9wpTJkC5kp42k1MMsFXmCctv/s4QA8gXPLi2bATDaRl9BKV8Pz3i7YCiEEfG9apMGjY2aTitQ9Hq7EERFqsUO9gdqRW9WF8ddi44ja3Y6madvCPBf8YFy1hAGaubgbljIvqGvxTiV6pU+JEbLRwz8/PH+YglrREe5c7V2SBYO1z0t0/8mnEDwaq35bwm4iU7vRsKTub0Rd4dA5vk6IDwu60F/JOg3DJPSk/o551GMY5Ym+58y9qZ1G7Bucfd83oKBF3QAD8ITs4O86mvIg5HVA4V4i8evBJEF1NbdhbDLN7ce6SybGzPntCeNEYLj/nT5L5hNWDN/NtVl4VmBQPrO8BWxSI59QSIIOAgmLZhSt/7mjr77MM="
