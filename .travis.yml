@@ -22,7 +22,6 @@ before_deploy:
   - zip -r ../test-app.zip ./
   - cd ..
   - aws s3 cp test-app.zip s3://xsolve-ci-cd-demo-codedeploy/test-app.zip --region eu-central-1
-#  - aws deploy create-deployment --application-name Demo-App --s3-location bucket=xsolve-ci-cd-demo-codedeploy,key=test-app.zip,bundleType=zip --deployment-group-name test-deployment-group --deployment-config-name CodeDeployDefault.OneAtATime --region eu-central-1
 
 deploy:
   - provider: codedeploy
