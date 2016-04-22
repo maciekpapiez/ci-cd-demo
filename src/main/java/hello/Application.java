@@ -16,14 +16,16 @@ import java.util.Map;
 @RestController
 public class Application {
 
-    @Autowired
+	protected static final String VERSION = "0.1";
+
+	@Autowired
 	private UserRepository userRepository;
 
 	@RequestMapping("/demo")
 	public Status getInfo() throws UnknownHostException {
 		final Status status = new Status();
 		status.setAddress(InetAddress.getLocalHost().getHostAddress());
-		status.setVersion("0.1");
+		status.setVersion(VERSION);
 		status.setUsersCount(userRepository.findAll().size());
 
 		return status;
